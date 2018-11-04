@@ -1,0 +1,18 @@
+<!--Country content-->
+<div class="card" *ngIf="statusClose">
+  <div class="lineStatus" [ngStyle]="{'background': statusBackground, 'color': statusColor}">
+    Status: {{country.status}}
+    <div class="closeButton" (click)="onRemoveCountry()">X</div>
+  </div>
+  <div class="card-content">
+    <span class="card-title">{{country.name}},</span>
+    <span class="card-title">{{country.capital}}</span>
+    <p>weather condition: </p>
+    <p>{{country.condition}}</p>
+  </div>
+  <div class="card-action" [ngStyle]="{'background': temperatureBackground}">
+    <a class="waves-effect waves-light btn" (click)="onVisited()"><i class="material-icons left">add_location</i>{{visitedButton}}</a>
+    <a class="waves-effect waves-light btn" (click)="onWishToVisit()"><i class="material-icons left">airplanemode_active</i>{{wishButton}}</a>
+    <p class="temperature">{{country.temp}}&deg;</p>
+  </div>
+</div>

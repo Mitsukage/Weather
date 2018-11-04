@@ -1,0 +1,27 @@
+//Main bar style
+
+.flex {
+  display: flex;
+  position: fixed;
+  width: calc(75% - 8px);
+  margin-left: -2px;
+  padding-left: 2px;
+  background: white;
+  z-index: 2;
+  .material-icons {
+    position: fixed;
+    margin-top: 15px;
+  }
+  label {
+    width: 100%;
+  }
+}
+.components {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 70px;
+  justify-content: center;
+  .col.s3 {
+    margin-left: unset;
+  }
+}

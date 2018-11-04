@@ -1,0 +1,17 @@
+<!--Main bar content-->
+<div class="flex">
+  <label>
+    <input type="text" [(ngModel)]="searchCountry">
+  </label>
+  <i class="material-icons">{{iconName}}</i>
+</div>
+
+<div class="components">
+    <app-country
+      class="col s3"
+      *ngFor="let c of countries | search:searchCountry; let i = index;"
+      [country]="c"
+      [index]="i"
+      [length]="countries.length"
+    ></app-country>
+</div>
