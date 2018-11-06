@@ -352,36 +352,18 @@ export class CountriesService {
   constructor(private http: HttpClient) {
     const countries = localStorage.getItem('countries');
     if (countries) {
-      this.currentCountries = JSON.parse(countries);
+      this._currentCountries = JSON.parse(countries);
     } else {
-      localStorage.setItem('countries', JSON.stringify(this.defaultCountries));
-      this.currentCountries = this.defaultCountries;
+      this.refreshCountries();
     }
-    for (let i = 0; i < this.currentCountries.length; i++) {
-      this.getTemperature(this.currentCountries[i].capital)
-        .subscribe((data) => {
-          this.currentCountries[i].temp = Number((data.main.temp - 273.15).toFixed(0));
-          this.currentCountries[i].condition = data.weather[0].description;
-          this.setSortBy(this.currentCountries, 'temp');
-          localStorage.setItem('countries', JSON.stringify(this.currentCountries));
-        },
-          error => console.log(error));
-    }
-  }
-
-  set currentCountries(value: { name: string; capital: string; temp: number; condition: string; status: string }[]) {
-    this._currentCountries = value;
   }
 
   get currentCountries(): { name: string; capital: string; temp: number; condition: string; status: string }[] {
     return this._currentCountries;
   }
 
-  get defaultCountries(): { name: string; capital: string; temp: number; condition: string; status: string }[] {
-    return this._defaultCountries;
-  }
 
-  getTemperature(capital): Observable<any> {
+  getTempAndCond(capital) {
     return this.http.get('http://api.openweathermap.org/data/2.5/weather?q=' + capital + '&appid=1ad7a80bc7cb88e336a1407c95b3a233');
   }
 
@@ -414,9 +396,22 @@ export class CountriesService {
   refreshCountries() {
     this._currentCountries.splice(0, this._currentCountries.length);
     for (let i = 0; i < this._defaultCountries.length; i++) {
-      this._currentCountries.push(this._defaultCountries[i]);
+      this.getTempAndCond(this._defaultCountries[i].capital)
+        .subscribe((dataArr) => {
+            const obj = {
+              name: this._defaultCountries[i].name,
+              capital: this._defaultCountries[i].capital,
+              temp: Number((dataArr.main.temp - 273.15).toFixed(0)),
+              condition: dataArr.weather[0].description,
+              status: 'neutral'
+            };
+            this._currentCountries.push(obj);
+            this.setSortBy(this._currentCountries, 'temp');
+            localStorage.setItem('countries', JSON.stringify(this._currentCountries));
+          },
+          error => console.log(error)
+        );
     }
-    localStorage.setItem('countries', JSON.stringify(this._currentCountries));
   }
 
   onRemoveCountry(index: number) {
