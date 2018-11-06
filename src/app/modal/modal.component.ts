@@ -20,7 +20,7 @@ export class ModalComponent {
 
   AddCountry() {
     if (this.nameCountry && this.capitalCountry) {
-      this.serv.getTemperature(this.capitalCountry).subscribe((data) => {
+      this.serv.getTempAndCond(this.capitalCountry).subscribe((data) => {
         this.serv.addCountry({
           name: this.nameCountry,
           capital: this.capitalCountry,

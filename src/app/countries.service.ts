@@ -363,7 +363,7 @@ export class CountriesService {
   }
 
 
-  getTempAndCond(capital) {
+  getTempAndCond(capital): Observable<any> {
     return this.http.get('http://api.openweathermap.org/data/2.5/weather?q=' + capital + '&appid=1ad7a80bc7cb88e336a1407c95b3a233');
   }
 
@@ -401,7 +401,7 @@ export class CountriesService {
             const obj = {
               name: this._defaultCountries[i].name,
               capital: this._defaultCountries[i].capital,
-              temp: Number((dataArr.main.temp - 273.15).toFixed(0)),
+              temp: Number((dataArr.obj.temp - 273.15).toFixed(0)),
               condition: dataArr.weather[0].description,
               status: 'neutral'
             };
