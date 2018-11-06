@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CountriesService {
-
   // default countries array
   private _defaultCountries = [
     {
@@ -345,24 +346,81 @@ export class CountriesService {
     }
   ];
 
-  constructor() {
+  // current array of counries
+  private _currentCountries = [];
+
+  constructor(private http: HttpClient) {
+    const countries = localStorage.getItem('countries');
+    if (countries) {
+      this.currentCountries = JSON.parse(countries);
+    } else {
+      localStorage.setItem('countries', JSON.stringify(this.defaultCountries));
+      this.currentCountries = this.defaultCountries;
+    }
+    for (let i = 0; i < this.currentCountries.length; i++) {
+      this.getTemperature(this.currentCountries[i].capital)
+        .subscribe((data) => {
+          this.currentCountries[i].temp = Number((data.main.temp - 273.15).toFixed(0));
+          this.currentCountries[i].condition = data.weather[0].description;
+          this.setSortBy(this.currentCountries, 'temp');
+          localStorage.setItem('countries', JSON.stringify(this.currentCountries));
+        },
+          error => console.log(error));
+    }
   }
 
-  set defaultCountries(value: { name: string; capital: string; temp: number; condition: string; status: string }[]) {
-    this._defaultCountries = value;
+  set currentCountries(value: { name: string; capital: string; temp: number; condition: string; status: string }[]) {
+    this._currentCountries = value;
+  }
+
+  get currentCountries(): { name: string; capital: string; temp: number; condition: string; status: string }[] {
+    return this._currentCountries;
   }
 
   get defaultCountries(): { name: string; capital: string; temp: number; condition: string; status: string }[] {
     return this._defaultCountries;
   }
 
+  getTemperature(capital): Observable<any> {
+    return this.http.get('http://api.openweathermap.org/data/2.5/weather?q=' + capital + '&appid=1ad7a80bc7cb88e336a1407c95b3a233');
+  }
+
+  // Sort array by
+  setSortBy(countries, key) {
+    countries.sort(function (a, b) {
+      const keyA = a[key],
+        keyB = b[key];
+      if (keyA < keyB) {
+        return -1;
+      }
+      if (keyA > keyB) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  addCountry(country) {
+    this._currentCountries.push(country);
+    this.setSortBy(this._currentCountries, 'temp');
+    localStorage.setItem('countries', JSON.stringify(this._currentCountries));
+  }
+
   changeCountry(index: number, status: string) {
-    this._defaultCountries[index].status = status;
-    localStorage.setItem('countries', JSON.stringify(this._defaultCountries));
+    this._currentCountries[index].status = status;
+    localStorage.setItem('countries', JSON.stringify(this._currentCountries));
+  }
+
+  refreshCountries() {
+    this._currentCountries.splice(0, this._currentCountries.length);
+    for (let i = 0; i < this._defaultCountries.length; i++) {
+      this._currentCountries.push(this._defaultCountries[i]);
+    }
+    localStorage.setItem('countries', JSON.stringify(this._currentCountries));
   }
 
   onRemoveCountry(index: number) {
-    this._defaultCountries.splice(index, 1);
-    localStorage.setItem('countries', JSON.stringify(this._defaultCountries));
+    this._currentCountries.splice(index, 1);
+    localStorage.setItem('countries', JSON.stringify(this._currentCountries));
   }
 }

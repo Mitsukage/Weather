@@ -7,6 +7,8 @@ import { MainBarComponent } from './main-bar/main-bar.component';
 import { CountryComponent } from './country/country.component';
 import {FormsModule} from '@angular/forms';
 import {SearchPipe} from './search.pipe';
+import { ModalComponent } from './modal/modal.component';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -14,11 +16,13 @@ import {SearchPipe} from './search.pipe';
     SideBarComponent,
     MainBarComponent,
     CountryComponent,
-    SearchPipe
+    SearchPipe,
+    ModalComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {CountriesService} from '../countries.service';
+import {ModalService} from '../modal.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -8,5 +10,19 @@ import { Component } from '@angular/core';
 export class SideBarComponent {
   // names
   userTitle = 'User panel';
-  userFields = ['Add city', 'Refresh All'];
+  userFields = [];
+
+  constructor(private serv: CountriesService, private modal: ModalService) {
+    this.userFields = [{
+      name: 'Add Country',
+      func: () => {
+        modal.toggleModalVisibility();
+      }
+    }, {
+      name: 'Refresh All',
+      func: () => {
+        serv.refreshCountries();
+      }
+    }];
+  }
 }

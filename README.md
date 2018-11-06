@@ -1,5 +1,17 @@
 # Weather
 
+About:
+- 48 default European countries
+- show their weather - temperature and conditions
+- sorted by temperature
+- first line - show coldest countries with blue line
+- last line - show hot temperatures with red line
+- can Add/Remove countries
+- can search by letters of capital
+- Temperature and conditions from Weather API
+- can check Visited or Wish to visit status of country
+- can Refresh all countries and their status
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.2.
 
 ## Development server

@@ -12,14 +12,8 @@ export class MainBarComponent {
   searchCountry = '';
   // countries array
   countries = [];
+
   constructor(private serv: CountriesService) {
-    const countries = localStorage.getItem('countries');
-    if (countries) {
-      this.serv.defaultCountries = JSON.parse(countries);
-      this.countries = this.serv.defaultCountries;
-    } else {
-      this.countries = serv.defaultCountries;
-      localStorage.setItem('countries', JSON.stringify(this.countries));
-    }
+    this.countries = serv.currentCountries;
   }
 }

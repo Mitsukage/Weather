@@ -1,5 +1,6 @@
 <!--Side bar content-->
 <ul class="sidenav sidenav-fixed">
   <h2>{{userTitle}}</h2>
-  <li *ngFor="let uf of userFields"><a href="#!">{{uf}}</a></li>
+  <li *ngFor="let uf of userFields"><a (click)="uf.func()">{{uf.name}}</a></li>
+  <li><a href="https://github.com/Mitsukage/Weather" target="_blank">GitHub</a></li>
 </ul>
