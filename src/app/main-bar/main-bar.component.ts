@@ -1,4 +1,9 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Store} from '@ngrx/store';
+import {State} from '../store/countries.state';
+import {Observable} from 'rxjs';
+import {Countries} from '../models/country.model';
+import {LoadCountries, UpdateCountry} from '../store/actions/countries.action';
 import {CountriesService} from '../countries.service';
 
 @Component({
@@ -6,14 +11,18 @@ import {CountriesService} from '../countries.service';
   templateUrl: './main-bar.component.html',
   styleUrls: ['./main-bar.component.scss']
 })
-export class MainBarComponent {
+
+export class MainBarComponent implements OnInit {
   // names
   iconName = 'search';
   searchCountry = '';
   // countries array
-  countries = [];
+  public countries: Observable<Countries>;
 
-  constructor(private serv: CountriesService) {
-    this.countries = serv.currentCountries;
+  constructor(private store: Store<State>, private serv: CountriesService) {
+  }
+
+  ngOnInit() {
+    this.countries = this.serv.loadCountries();
   }
 }

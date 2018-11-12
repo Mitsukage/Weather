@@ -1,5 +1,7 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {CountriesService} from '../countries.service';
+import {Store} from '@ngrx/store';
+import {State} from '../store/countries.state';
+import {DeleteCountry, UpdateCountry} from '../store/actions/countries.action';
 
 @Component({
   selector: 'app-country',
@@ -18,7 +20,7 @@ export class CountryComponent implements OnInit, OnChanges {
   temperatureBackground = '#5ef57e';
   statusClose = true;
 
-  constructor(private serv: CountriesService) {
+  constructor(private store: Store<State>) {
   }
 
   ngOnInit() {
@@ -28,6 +30,7 @@ export class CountryComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.onHotColdCountries();
+    this.onCheckVisitedWish();
   }
 
   onHotColdCountries() {
@@ -52,27 +55,25 @@ export class CountryComponent implements OnInit, OnChanges {
         this.statusBackground = 'purple';
         this.statusColor = 'white';
         break;
+      default:
+        this.statusBackground = 'antiquewhite';
+        this.statusColor = 'black';
     }
   }
 
   onVisited() {
-    this.changeCountry('visited');
+    this.store.dispatch(new UpdateCountry('visited', this.index));
     this.statusBackground = 'grey';
     this.statusColor = 'white';
   }
 
   onWishToVisit() {
-    this.changeCountry('wish to visit');
+    this.store.dispatch(new UpdateCountry('wish to visit', this.index));
     this.statusBackground = 'purple';
     this.statusColor = 'white';
   }
 
-  changeCountry(status) {
-    this.serv.changeCountry(this.index, status);
-    this.country.status = status;
-  }
-
   onRemoveCountry() {
-    this.serv.onRemoveCountry(this.index);
+    this.store.dispatch(new DeleteCountry(this.country));
   }
 }

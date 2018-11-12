@@ -9,6 +9,8 @@ import {FormsModule} from '@angular/forms';
 import {SearchPipe} from './search.pipe';
 import { ModalComponent } from './modal/modal.component';
 import {HttpClientModule} from '@angular/common/http';
+import {StoreModule} from '@ngrx/store';
+import {countryReducer} from './store/reducers/countries.reducer';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import {HttpClientModule} from '@angular/common/http';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    StoreModule.forRoot({countryPage: countryReducer})
   ],
   providers: [],
   bootstrap: [AppComponent]

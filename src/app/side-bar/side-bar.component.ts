@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {CountriesService} from '../countries.service';
 import {ModalService} from '../modal.service';
+import {CountriesService} from '../countries.service';
 
 @Component({
   selector: 'app-side-bar',
